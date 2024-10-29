@@ -83,6 +83,15 @@ public class AccountServiceImp implements AccountService {
         return AccountMapper.mapTAccountDto(updatedBalance);
     }
 
+    @Override
+    public void deleteAccount(long id) {
+
+        AccountEntity accountEntity=accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account does not Exist"));
+
+        accountRepository.delete(accountEntity);
+    
+    }
+
    
 
     
