@@ -45,6 +45,44 @@ public class AccountServiceImp implements AccountService {
 
     }
 
+    @Override
+    public AccountDto getAccountById(Long id) {
+       
+        AccountEntity accountEntity=accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account does not Exist"));
+
+        return AccountMapper.mapTAccountDto(accountEntity);
+
+    }
+
+    @Override
+    public AccountDto depositAmount(Long id, Double amount) {
+       
+        AccountEntity accountEntity=accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account does not Exist"));
+
+        accountEntity.setBalance(accountEntity.getBalance()+amount);
+
+        AccountEntity updatedBalance=accountRepository.save(accountEntity);
+
+        return AccountMapper.mapTAccountDto(updatedBalance);
+
+
+    }
+
+    @Override
+    public AccountDto withdrawAmount(Long id, Double amount) {
+        AccountEntity accountEntity=accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account does not Exist"));
+
+        if(amount>accountEntity.getBalance()){
+            throw new RuntimeException("Insufficient funds");
+        }else{
+
+        accountEntity.setBalance(accountEntity.getBalance()-amount);
+        }
+        AccountEntity updatedBalance=accountRepository.save(accountEntity);
+
+        return AccountMapper.mapTAccountDto(updatedBalance);
+    }
+
    
 
     
